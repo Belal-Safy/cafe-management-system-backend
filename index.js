@@ -76,5 +76,7 @@ app.use('/statistics', statisticsRoute);
 
 const http = require('http');
 const server = http.createServer(app);
-server.listen(process.env.PORT)
-console.log(`running on http://localhost:${process.env.PORT}`);
+
+const port = process.env.PORT || 3000
+server.listen(port)
+console.log(`running on http://localhost:${port}`);
