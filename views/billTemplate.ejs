@@ -1,0 +1,314 @@
+<html>
+<style>
+    * {
+        font-family: "Lucida Console", "Courier New", monospace;
+    }
+
+    .times {
+        font-family: "Times New Roman", Times, serif;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mr {
+        margin-right: 5px;
+    }
+
+    #invoice-POS {
+        box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+        padding: 2mm;
+        margin: 0 auto;
+        width: 600px;
+        background: #fff;
+    }
+
+    h1 {
+        font-size: 1.5em;
+        color: #222;
+    }
+
+    h2 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 17px;
+        font-weight: 300;
+        line-height: 2em;
+    }
+
+    p {
+        font-size: 13px;
+        color: #666;
+        line-height: 1.2em;
+    }
+
+    #top,
+    #mid,
+    #bot {
+        border-bottom: 1px solid #eee;
+    }
+
+    #top {
+        min-height: 100px;
+    }
+
+    #mid {
+        min-height: 80px;
+    }
+
+    #bot {
+        min-height: 50px;
+    }
+
+    .d-flex {
+        display: flex;
+    }
+
+    .j-c-b {
+        justify-content: space-between;
+    }
+
+    #top .logo {
+        height: 135px;
+        width: 135px;
+        background-image: url('<%= image %>');
+        background-repeat: no-repeat;
+        background-size: 100%;
+    }
+
+    .info {
+        display: block;
+        margin-left: 0;
+        font-size: 10px;
+    }
+
+    .title {
+        float: right;
+    }
+
+    .title p {
+        text-align: right;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    td {
+        padding-left: 10px;
+        max-width: 100%;
+        white-space: nowrap;
+    }
+
+    .tabletitle {
+        font-size: 0.5em;
+        background: #eee;
+    }
+
+    .service {
+        border-bottom: 1px solid #eee;
+    }
+
+    .item {
+        width: 24mm;
+    }
+
+    .itemtext {
+        font-size: 13px;
+    }
+
+    #legalcopy {
+        margin-top: 5mm;
+    }
+</style>
+<div id="invoice-POS">
+
+    <center id="top">
+        <div class="logo">
+        </div>
+        <div class="info">
+            <h2>Cafe' Management system</h2>
+        </div>
+        <!--End Info-->
+    </center>
+    <!--End InvoiceTop-->
+
+    <div id="mid">
+        <div class="info">
+            <h3>Order Info</h3>
+            <div>
+                <p>Order number:
+                    <span>
+                        <%= uuid %>
+                    </span>
+                </p>
+                <div style="padding-right: 100px;">
+                    <p style="display: inline-block;min-width: 300px;">Cashier:
+                        <%= cashier_name %>
+                    </p>
+                    <p style="display: inline-block;">Date:
+                        <%= date %>
+                    </p>
+                </div>
+
+            </div>
+        </div>
+        <div style="margin-top: 10px; margin-bottom: 10px;" class="info">
+            <h3 style="margin-bottom: 5px;">Customer</h3>
+            <div>
+                <div style="padding-right: 100px;">
+                    <p style="display: inline-block; min-width: 300px;">Customer name:
+                        <%= customer_name %>
+                    </p>
+                    <p style="display: inline-block;">Email:
+                        <%= email %>
+                    </p>
+                </div>
+
+                <div>
+                    <p style="display: inline-block; min-width: 300px;">Address:<br>
+                        <%= address %>
+                    </p>
+                </div>
+
+                <div style="padding-right: 100px;">
+                    <p style="display: inline-block; min-width: 300px;">Phone:
+                        <%= phone %>
+                    </p>
+                    <p style="display: inline-block;">payment method:
+                        <%= payment_method %>
+                    </p>
+                </div>
+
+            </div>
+            <div style="margin-top: 10px; margin-bottom: 20px;" class="info">
+                <div>
+                    <p>
+                        <strong>Notes:</strong><br>
+                        <%= notes %>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!--End Invoice Mid-->
+
+        <div id="bot">
+
+            <div id="table">
+                <table>
+                    <tr class="tabletitle">
+                        <td class="item">
+                            <h2 class="times mr">Item</h2>
+                        </td>
+                        <td class="item">
+                            <h2 class="times ">Price</h2>
+                        </td>
+                        <td class="Hours">
+                            <h2 class="times text-center">Qty</h2>
+                        </td>
+                        <td class="Rate">
+                            <h2 class="times">Sub Total</h2>
+                        </td>
+                    </tr>
+
+                    <% products.forEach(product=>{ %>
+                        <tr class="service ">
+                            <td class="tableitem" style="min-width: 300px;">
+                                <p class="itemtext mr">
+                                    <%= product.product_name %>
+                                </p>
+                            </td>
+                            <td class="tableitem">
+                                <p class="itemtext ">
+                                    $<%= product.price %>
+                                </p>
+                            </td>
+                            <td class="tableitem">
+                                <p class="itemtext text-center">
+                                    <%= product.quantity %>
+                                </p>
+                            </td>
+                            <td class="tableitem">
+                                <p class="itemtext ">
+                                    $<%= product.subtotal %>
+                                </p>
+                            </td>
+                        </tr>
+                        <% }); %>
+
+                            <tr class="tabletitle">
+                                <td class="Rate">
+                                    <p style="margin-bottom: 5px; color: black; font-size: 13px;">Subtotal</p>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td class="payment">
+                                    <p style="margin-bottom: 5px; color: black; font-size: 13px;">
+                                        $<%= subtotal %>
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr class="tabletitle">
+                                <td class="Rate">
+                                    <p style="margin-bottom: 5px; color: black; font-size: 13px;">Discount rate(%<%= discount %>)</p>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td class="payment">
+                                    <p style="margin-bottom: 5px; color: black; font-size: 13px; margin-left: -7px;">
+                                        -$<%= discounted_subtotal %>
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr class="tabletitle">
+                                <td class="Rate">
+                                    <p style="margin-bottom: 5px; color: black; font-size: 13px;">Tax(14%)</p>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td class="payment">
+                                    <p style="margin-bottom: 5px; color: black; font-size: 13px;">
+                                        $<%= tax %>
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr class="tabletitle">
+                                <td class="Rate">
+                                    <h3 style="margin-bottom: 5px;">Total</h3>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td class="payment">
+                                    <h2>
+                                        $<%= total.toFixed(2) %>
+                                    </h2>
+                                </td>
+                            </tr>
+                </table>
+            </div>
+            <!--End Table-->
+
+            <div id="legalcopy">
+                <p class="legal" style="text-align: center;"><strong>Thank you for your visiting!</strong></p>
+            </div>
+            <div>
+                <p style="text-align: center; font-size: 10px;"> By: Belal Safy - 01025340816</p>
+            </div>
+
+        </div>
+        <!--End InvoiceBot-->
+    </div>
+    <!--End Invoice-->
+
+</html>
