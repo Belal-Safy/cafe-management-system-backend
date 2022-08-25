@@ -52,7 +52,6 @@ router.post('/signup', async(req, res) => {;
         const encryptedPassword = await bcrypt.hash(user.password, salt);
         pool.getConnection((conn_error, connection) => {
             if (conn_error) {
-                connection.release();
                 return res.status(500).json(conn_error);
             }
             let query = "select * from cafe.users where email= ?";
@@ -99,7 +98,6 @@ router.post('/upload-image', authenticateToken, upload.single('image'), (req, re
     let image = req.file.path.split('\\')[1];
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
-            connection.release();
             return res.status(500).json(conn_error);
         }
         let query = "select img from cafe.users where user_id= ?";
@@ -128,7 +126,6 @@ router.post('/login', (req, res) => {
     let user = req.body;
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
-            connection.release();
             return res.status(500).json(conn_error);
         }
         let query = "select password,status from cafe.users where email= ?";
@@ -175,7 +172,6 @@ router.post('/SendMail', (req, res) => {
     let email = req.body.email;
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
-            connection.release();
             return res.status(500).json(conn_error);
         }
         let query = "select name,password from cafe.users where email= ?";
@@ -231,7 +227,6 @@ router.post('/forgottenPasswordCheckCode', (req, res) => {
     let code = req.body.code;
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
-            connection.release();
             return res.status(500).json(conn_error);
         }
         let query = "select code from cafe.codes where email= ?";
@@ -266,7 +261,6 @@ router.patch('/forgottenPasswordChangePassword', authenticateToken, async(req, r
         const encryptedNewPassword = await bcrypt.hash(new_password, salt);
         pool.getConnection((conn_error, connection) => {
             if (conn_error) {
-                connection.release();
                 return res.status(500).json(conn_error);
             }
             let query = 'UPDATE cafe.users SET password = ? WHERE email = ?';
@@ -288,7 +282,6 @@ router.get('/getAllUsers', authenticateToken, isAdmin, (req, res) => {
     if (res.locals.role == 'admin') {
         pool.getConnection((conn_error, connection) => {
             if (conn_error) {
-                connection.release();
                 return res.status(500).json(conn_error);
             }
             let query = "select user_id, name, email, phone, status, role from cafe.users";
@@ -310,7 +303,6 @@ router.get('/getUser/', authenticateToken, (req, res) => {
     let id = res.locals.user_id;
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
-            connection.release();
             return res.status(500).json(conn_error);
         }
         let query = "select name, email, img, phone, role from cafe.users where user_id = ?";
@@ -352,7 +344,6 @@ router.patch('/updateInfo', authenticateToken, (req, res) => {
     values.push(id);
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
-            connection.release();
             return res.status(500).json(conn_error);
         }
         connection.query(query, values, (err) => {
@@ -391,7 +382,6 @@ router.patch('/updateStatus', authenticateToken, checkRole, (req, res) => {
         let newStatus = req.body.status;
         pool.getConnection((conn_error, connection) => {
             if (conn_error) {
-                connection.release();
                 return res.status(500).json(conn_error);
             }
             let query = 'UPDATE cafe.users SET status = ? WHERE (user_id = ?)';
@@ -415,7 +405,6 @@ router.patch('/changePassword', authenticateToken, async(req, res) => {
     let new_password = req.body.new_password;
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
-            connection.release();
             return res.status(500).json(conn_error);
         }
         let query = 'select password from cafe.users WHERE user_id = ?';
@@ -451,7 +440,6 @@ router.delete('/deleteMe', authenticateToken, (req, res) => {
     let id = res.locals.user_id;
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
-            connection.release();
             return res.status(500).json(conn_error);
         }
         let query = "select img from cafe.users where user_id= ?"
@@ -482,7 +470,6 @@ router.delete('/deleteUser/:id', authenticateToken, checkRole, (req, res) => {
         let id = req.params.id;
         pool.getConnection((conn_error, connection) => {
             if (conn_error) {
-                connection.release();
                 return res.status(500).json(conn_error);
             }
             let query = "select img from cafe.users where user_id= ?"
