@@ -54,14 +54,14 @@ router.post('/signup', async(req, res) => {;
             if (conn_error) {
                 return res.status(500).json(conn_error);
             }
-            let query = "select * from cafe.users where email= ?";
+            let query = "select * from belalsaf_cafe.users where email= ?";
             connection.query(query, [user.email], (err, result) => {
                 if (!err) {
                     if (result.length <= 0) {
-                        let query = "INSERT INTO cafe.users (name, email, password, phone) VALUES (?, ?, ?, ?);";
+                        let query = "INSERT INTO belalsaf_cafe.users (name, email, password, phone) VALUES (?, ?, ?, ?);";
                         connection.query(query, [user.name, user.email, encryptedPassword, user.phone], (err) => {
                             if (!err) {
-                                let query = "select user_id from cafe.users where email= ?";
+                                let query = "select user_id from belalsaf_cafe.users where email= ?";
                                 connection.query(query, [user.email], (err, result) => {
                                     if (!err) {
                                         let user_id = result[0].user_id;
@@ -100,14 +100,14 @@ router.post('/upload-image', authenticateToken, upload.single('image'), (req, re
         if (conn_error) {
             return res.status(500).json(conn_error);
         }
-        let query = "select img from cafe.users where user_id= ?";
+        let query = "select img from belalsaf_cafe.users where user_id= ?";
         connection.query(query, [id], (err, result) => {
             if (!err) {
                 if (result[0].img != 'default.png') {
                     const path = './users-images/' + result[0].img;
                     fs.unlinkSync(path);
                 }
-                let query = 'UPDATE cafe.users SET img = ? WHERE user_id = ?';
+                let query = 'UPDATE belalsaf_cafe.users SET img = ? WHERE user_id = ?';
                 connection.query(query, [image, id], (err) => {
                     if (!err) {
                         return res.status(200).json("uploaded successfully");
@@ -128,7 +128,7 @@ router.post('/login', (req, res) => {
         if (conn_error) {
             return res.status(500).json(conn_error);
         }
-        let query = "select password,status from cafe.users where email= ?";
+        let query = "select password,status from belalsaf_cafe.users where email= ?";
         connection.query(query, [user.email], async(err, result) => {
             if (!err) {
                 if (result.length <= 0) {
@@ -138,7 +138,7 @@ router.post('/login', (req, res) => {
                         if (result[0].status == 0) {
                             return res.status(400).json("deactivated account");
                         } else {
-                            let query = "select user_id from cafe.users where email= ?";
+                            let query = "select user_id from belalsaf_cafe.users where email= ?";
                             connection.query(query, [user.email], (err, result) => {
                                 if (!err) {
                                     let user_id = result[0].user_id;
@@ -174,7 +174,7 @@ router.post('/SendMail', (req, res) => {
         if (conn_error) {
             return res.status(500).json(conn_error);
         }
-        let query = "select name,password from cafe.users where email= ?";
+        let query = "select name,password from belalsaf_cafe.users where email= ?";
         connection.query(query, [email], async(err, result) => {
             if (!err) {
                 if (result.length <= 0) {
@@ -185,7 +185,7 @@ router.post('/SendMail', (req, res) => {
                         const code = Math.floor((Math.random() * 100000) + 48);
                         const salt = await bcrypt.genSalt(10);
                         let hashed_code = await bcrypt.hash(code.toString(), salt);
-                        let query = "INSERT INTO cafe.codes (email, code, timestamp) VALUES ( ?, ?, ?) ON DUPLICATE KEY UPDATE code = ?, timestamp = ?;";
+                        let query = "INSERT INTO belalsaf_cafe.codes (email, code, timestamp) VALUES ( ?, ?, ?) ON DUPLICATE KEY UPDATE code = ?, timestamp = ?;";
                         let current_date = new Date().toISOString().slice(0, 19).replace('T', ' ');
                         connection.query(query, [email, hashed_code, current_date, hashed_code, current_date], (err, result) => {
                             if (!err) {
@@ -229,7 +229,7 @@ router.post('/forgottenPasswordCheckCode', (req, res) => {
         if (conn_error) {
             return res.status(500).json(conn_error);
         }
-        let query = "select code from cafe.codes where email= ?";
+        let query = "select code from belalsaf_cafe.codes where email= ?";
         connection.query(query, [email], async(err, result) => {
             if (!err) {
                 if (result.length <= 0) {
@@ -263,7 +263,7 @@ router.patch('/forgottenPasswordChangePassword', authenticateToken, async(req, r
             if (conn_error) {
                 return res.status(500).json(conn_error);
             }
-            let query = 'UPDATE cafe.users SET password = ? WHERE email = ?';
+            let query = 'UPDATE belalsaf_cafe.users SET password = ? WHERE email = ?';
             connection.query(query, [encryptedNewPassword, email], (err) => {
                 if (!err) {
                     return res.status(200).json("changed successfully!");
@@ -284,7 +284,7 @@ router.get('/getAllUsers', authenticateToken, isAdmin, (req, res) => {
             if (conn_error) {
                 return res.status(500).json(conn_error);
             }
-            let query = "select user_id, name, email, phone, status, role from cafe.users";
+            let query = "select user_id, name, email, phone, status, role from belalsaf_cafe.users";
             connection.query(query, [req.body.email], (err, result) => {
                 if (!err) {
                     return res.status(200).json(result);
@@ -305,7 +305,7 @@ router.get('/getUser/', authenticateToken, (req, res) => {
         if (conn_error) {
             return res.status(500).json(conn_error);
         }
-        let query = "select name, email, img, phone, role from cafe.users where user_id = ?";
+        let query = "select name, email, img, phone, role from belalsaf_cafe.users where user_id = ?";
         connection.query(query, [id], (err, result) => {
             if (!err) {
                 return res.status(200).json(result[0]);
@@ -327,7 +327,7 @@ router.patch('/updateInfo', authenticateToken, (req, res) => {
     let obj = { 'name': name, 'email': email, 'phone': phone };
     let first = true;
 
-    let query = 'UPDATE cafe.users SET ';
+    let query = 'UPDATE belalsaf_cafe.users SET ';
     let values = [];
     for (let prop in obj) {
         if (obj[prop] != undefined) {
@@ -363,7 +363,7 @@ router.patch('/updateRole', authenticateToken, checkRole, (req, res) => {
         let id = req.body.user_id;
         let newRole = req.body.role;
 
-        let query = 'UPDATE cafe.users SET role = ? WHERE (user_id = ?)';
+        let query = 'UPDATE belalsaf_cafe.users SET role = ? WHERE (user_id = ?)';
         connection.query(query, [newRole, id], (err) => {
             if (!err) {
                 return res.status(200).json("updated successfully!");
@@ -384,7 +384,7 @@ router.patch('/updateStatus', authenticateToken, checkRole, (req, res) => {
             if (conn_error) {
                 return res.status(500).json(conn_error);
             }
-            let query = 'UPDATE cafe.users SET status = ? WHERE (user_id = ?)';
+            let query = 'UPDATE belalsaf_cafe.users SET status = ? WHERE (user_id = ?)';
             connection.query(query, [newStatus, id], (err) => {
                 if (!err) {
                     return res.status(200).json("updated successfully!");
@@ -407,14 +407,14 @@ router.patch('/changePassword', authenticateToken, async(req, res) => {
         if (conn_error) {
             return res.status(500).json(conn_error);
         }
-        let query = 'select password from cafe.users WHERE user_id = ?';
+        let query = 'select password from belalsaf_cafe.users WHERE user_id = ?';
         connection.query(query, [id], async(err, result) => {
             if (!err) {
                 if (await bcrypt.compare(old_password, result[0].password)) {
                     const salt = await bcrypt.genSalt(10);
                     try {
                         const encryptedNewPassword = await bcrypt.hash(new_password, salt);
-                        let query = 'UPDATE cafe.users SET password = ? WHERE user_id = ?';
+                        let query = 'UPDATE belalsaf_cafe.users SET password = ? WHERE user_id = ?';
                         connection.query(query, [encryptedNewPassword, id], (err) => {
                             if (!err) {
                                 return res.status(200).json("changed successfully!");
@@ -442,14 +442,14 @@ router.delete('/deleteMe', authenticateToken, (req, res) => {
         if (conn_error) {
             return res.status(500).json(conn_error);
         }
-        let query = "select img from cafe.users where user_id= ?"
+        let query = "select img from belalsaf_cafe.users where user_id= ?"
         connection.query(query, [id], (err, result) => {
             if (!err) {
                 if (result[0].img != 'default.png') {
                     const path = './users-images/' + result[0].img;
                     fs.unlinkSync(path);
                 }
-                let query = "DELETE FROM cafe.users WHERE (user_id = ?)"
+                let query = "DELETE FROM belalsaf_cafe.users WHERE (user_id = ?)"
                 connection.query(query, [id], (err, result) => {
                     if (!err) {
                         return res.status(200).json("deleted successfully!");
@@ -472,14 +472,14 @@ router.delete('/deleteUser/:id', authenticateToken, checkRole, (req, res) => {
             if (conn_error) {
                 return res.status(500).json(conn_error);
             }
-            let query = "select img from cafe.users where user_id= ?"
+            let query = "select img from belalsaf_cafe.users where user_id= ?"
             connection.query(query, [id], (err, result) => {
                 if (!err) {
                     if (result[0].img != 'default.png') {
                         const path = './users-images/' + result[0].img;
                         fs.unlinkSync(path);
                     }
-                    let query = "DELETE FROM cafe.users WHERE (user_id = ?)";
+                    let query = "DELETE FROM belalsaf_cafe.users WHERE (user_id = ?)";
                     connection.query(query, [id], (err) => {
                         if (!err) {
                             return res.status(200).json("deleted successfully!");
