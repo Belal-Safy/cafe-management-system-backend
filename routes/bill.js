@@ -121,7 +121,17 @@ function generatePDF(res, mainResult, uuid) {
     let total = mainResult.total;
     let products = JSON.parse(mainResult.products);
 
-    let billData = { uuid: uuid, date: date, payment_method: payment_method, total: total, notes: notes, discount: discount };
+    let billData = {
+        uuid: uuid,
+        date: date,
+        payment_method: payment_method,
+        total: total,
+        notes: notes,
+        discount: discount,
+        subtotal: 0,
+        discounted_subtotal: 0,
+        tax: 0
+    };
     let detailedProducts = [];
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
@@ -159,7 +169,6 @@ function generatePDF(res, mainResult, uuid) {
 
                     detailedProducts.push(detailedProduct);
                 } else {
-                    console.log('errrrror:', err);
                     return res.status(500).json(err);
                 };
             });
@@ -200,7 +209,6 @@ function generatePDF(res, mainResult, uuid) {
                     });
                 });
             } else {
-                console.log('errrrror:', err);
                 return res.status(500).json(err);
             }
         });
