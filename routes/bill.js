@@ -153,11 +153,13 @@ function generatePDF(res, mainResult, uuid) {
                         detailedProduct.subtotal = 'unknown';
                     }
                     billData.subtotal = subtotal;
+                    console.log('subtotal: ', subtotal);
                     billData.discounted_subtotal = discounted_subtotal;
                     billData.tax = tax;
 
                     detailedProducts.push(detailedProduct);
                 } else {
+                    console.log('errrrror:', err);
                     return res.status(500).json(err);
                 };
             });
@@ -198,6 +200,7 @@ function generatePDF(res, mainResult, uuid) {
                     });
                 });
             } else {
+                console.log('errrrror:', err);
                 return res.status(500).json(err);
             }
         });
