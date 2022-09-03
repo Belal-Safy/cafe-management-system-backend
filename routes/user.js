@@ -164,7 +164,7 @@ router.post('/login', (req, res) => {
 
 //logout
 router.get('/logout', (req, res) => {
-    res.clearCookie('refreshToken').send({ status: 200 });
+    res.cookie('refreshToken', '', { httpOnly: true, expires: new Date(0), sameSite: 'None', secure: true }).send({ status: 200 });
 })
 
 //(send email with code)
