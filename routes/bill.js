@@ -111,7 +111,7 @@ router.get('/getPDF/:uuid', authenticateToken, (req, res) => {
 
 function generatePDF(res, mainResult, uuid) {
     let date = mainResult.timestamp;
-    let subtotal = 0;
+
     date.setTime(date.getTime() + process.env.TIMEZONE * 60 * 60 * 1000); //add timezone hours
     date = date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(); //format date
 
@@ -127,6 +127,9 @@ function generatePDF(res, mainResult, uuid) {
         if (conn_error) {
             return res.status(500).json(conn_error);
         }
+        let subtotal = 0;
+        let discounted_subtotal = 0;
+        let tax = 0;
         products.forEach(p => {
             let product_id = p.product_id;
             let quantity = p.quantity;
@@ -142,14 +145,17 @@ function generatePDF(res, mainResult, uuid) {
                         let x = parseFloat((result[0].price * quantity).toFixed(2));
                         detailedProduct.subtotal = x;
                         subtotal = parseFloat((subtotal + x).toFixed(2));
-                        billData.subtotal = subtotal;
-                        billData.discounted_subtotal = parseFloat((subtotal * (parseFloat(mainResult.discount) / 100)).toFixed(2));
-                        billData.tax = parseFloat(((subtotal - billData.discounted_subtotal) * 0.14).toFixed(2));
+                        discounted_subtotal = parseFloat((subtotal * (parseFloat(mainResult.discount) / 100)).toFixed(2));
+                        tax = parseFloat(((subtotal - discounted_subtotal) * 0.14).toFixed(2));
                     } else {
                         detailedProduct.product_name = 'deleted product';
                         detailedProduct.price = 'unknown';
                         detailedProduct.subtotal = 'unknown';
                     }
+                    billData.subtotal = subtotal;
+                    billData.discounted_subtotal = discounted_subtotal;
+                    billData.tax = tax;
+
                     detailedProducts.push(detailedProduct);
                 } else {
                     return res.status(500).json(err);
