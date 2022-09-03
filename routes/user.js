@@ -68,7 +68,7 @@ router.post('/signup', async(req, res) => {;
                                         let token = generateAccessToken(user_id);
                                         let refreshToken = generateRefreshToken(user_id);
                                         let expiry_date = new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-                                        return res.status(200).cookie('refreshToken', refreshToken, { httpOnly: true, expires: expiry_date }).json({ token: token });
+                                        return res.status(200).cookie('refreshToken', refreshToken, { httpOnly: true, expires: expiry_date, sameSite: 'None', secure: true }).json({ token: token });
                                     } else {
                                         return res.status(500).json(err);
                                     }
@@ -145,7 +145,7 @@ router.post('/login', (req, res) => {
                                     let token = generateAccessToken(user_id);
                                     let refreshToken = generateRefreshToken(user_id);
                                     let expiry_date = new Date(new Date().setFullYear(new Date().getFullYear() + 1))
-                                    return res.status(200).cookie('refreshToken', refreshToken, { httpOnly: true, expires: expiry_date }).json({ token: token });
+                                    return res.status(200).cookie('refreshToken', refreshToken, { httpOnly: true, expires: expiry_date, sameSite: 'None', secure: true }).json({ token: token });
                                 } else {
                                     return res.status(500).json(err);
                                 }
