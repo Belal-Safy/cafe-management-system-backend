@@ -58,7 +58,7 @@ app.get('/openTemplate', (req, res, next) => {
         email: 'anas@yahoo.com',
         phone: '123456789',
         cashier_name: 'Belal Safy',
-        // image: process.env.LogoURL,
+        image: process.env.LogoURL,
         subtotal: 550,
         discounted_subtotal: 200,
         tax: 27,

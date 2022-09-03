@@ -50,7 +50,7 @@ router.post('/add', authenticateToken, (req, res) => {
 
 //get all bills for admin
 router.get('/getBills', authenticateToken, (req, res) => {
-    let query = "select * from belalsaf_cafe.bills order by timestamp";
+    let query = "select * from belalsaf_cafe.bills order by timestamp DESC";
     pool.getConnection((conn_error, connection) => {
         if (conn_error) {
             return res.status(500).json(conn_error);
@@ -172,6 +172,7 @@ function generatePDF(res, mainResult, uuid) {
                 billData.email = results[0].email;
                 billData.phone = results[0].phone;
                 billData.cashier_name = results[0].name;
+                billData.image = process.env.LogoURL;
 
                 new Promise((resolve, reject) => {
                     ejs.renderFile(path.join(__dirname, "../views", "billTemplate.ejs"), billData, (err, data) => {
