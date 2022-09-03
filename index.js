@@ -15,7 +15,14 @@ app.use('/public', express.static('public'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors({ origin: process.env.FRONTEND_SERVER, credentials: true }));
+
+const corsConfig = {
+    origin: true,
+    credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
 
 app.get('/', (req, res) => {
     res.send("welcome to the backend");
@@ -51,7 +58,7 @@ app.get('/openTemplate', (req, res, next) => {
         email: 'anas@yahoo.com',
         phone: '123456789',
         cashier_name: 'Belal Safy',
-        image: process.env.LogoURL,
+        // image: process.env.LogoURL,
         subtotal: 550,
         discounted_subtotal: 200,
         tax: 27,

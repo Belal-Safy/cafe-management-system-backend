@@ -3,23 +3,23 @@
     * {
         font-family: "Lucida Console", "Courier New", monospace;
     }
-
+    
     .times {
         font-family: "Times New Roman", Times, serif;
     }
-
+    
     .text-right {
         text-align: right;
     }
-
+    
     .text-center {
         text-align: center;
     }
-
+    
     .mr {
         margin-right: 5px;
     }
-
+    
     #invoice-POS {
         box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
         padding: 2mm;
@@ -27,104 +27,104 @@
         width: 600px;
         background: #fff;
     }
-
+    
     h1 {
         font-size: 1.5em;
         color: #222;
     }
-
+    
     h2 {
         font-size: 2em;
     }
-
+    
     h3 {
         font-size: 17px;
         font-weight: 300;
         line-height: 2em;
     }
-
+    
     p {
         font-size: 13px;
         color: #666;
         line-height: 1.2em;
     }
-
+    
     #top,
     #mid,
     #bot {
         border-bottom: 1px solid #eee;
     }
-
+    
     #top {
         min-height: 100px;
     }
-
+    
     #mid {
         min-height: 80px;
     }
-
+    
     #bot {
         min-height: 50px;
     }
-
+    
     .d-flex {
         display: flex;
     }
-
+    
     .j-c-b {
         justify-content: space-between;
     }
-
+    
     #top .logo {
         height: 135px;
         width: 135px;
-        background-image: url('<%= image %>');
+        background-image: url('./public/images/logo.png');
         background-repeat: no-repeat;
         background-size: 100%;
     }
-
+    
     .info {
         display: block;
         margin-left: 0;
         font-size: 10px;
     }
-
+    
     .title {
         float: right;
     }
-
+    
     .title p {
         text-align: right;
     }
-
+    
     table {
         width: 100%;
         border-collapse: collapse;
     }
-
+    
     td {
         padding-left: 10px;
         max-width: 100%;
         white-space: nowrap;
     }
-
+    
     .tabletitle {
         font-size: 0.5em;
         background: #eee;
     }
-
+    
     .service {
         border-bottom: 1px solid #eee;
     }
-
+    
     .item {
         width: 24mm;
     }
-
+    
     .itemtext {
         font-size: 13px;
     }
-
+    
     #legalcopy {
         margin-top: 5mm;
     }
@@ -228,7 +228,8 @@
                             </td>
                             <td class="tableitem">
                                 <p class="itemtext ">
-                                    $<%= product.price %>
+                                    $
+                                    <%= product.price %>
                                 </p>
                             </td>
                             <td class="tableitem">
@@ -238,7 +239,8 @@
                             </td>
                             <td class="tableitem">
                                 <p class="itemtext ">
-                                    $<%= product.subtotal %>
+                                    $
+                                    <%= product.subtotal %>
                                 </p>
                             </td>
                         </tr>
@@ -252,20 +254,24 @@
                                 <td></td>
                                 <td class="payment">
                                     <p style="margin-bottom: 5px; color: black; font-size: 13px;">
-                                        $<%= subtotal %>
+                                        $
+                                        <%= subtotal %>
                                     </p>
                                 </td>
                             </tr>
 
                             <tr class="tabletitle">
                                 <td class="Rate">
-                                    <p style="margin-bottom: 5px; color: black; font-size: 13px;">Discount rate(%<%= discount %>)</p>
+                                    <p style="margin-bottom: 5px; color: black; font-size: 13px;">Discount rate(%
+                                        <%=
+                                            discount %>)</p>
                                 </td>
                                 <td></td>
                                 <td></td>
                                 <td class="payment">
                                     <p style="margin-bottom: 5px; color: black; font-size: 13px; margin-left: -7px;">
-                                        -$<%= discounted_subtotal %>
+                                        -$
+                                        <%= discounted_subtotal %>
                                     </p>
                                 </td>
                             </tr>
@@ -278,7 +284,8 @@
                                 <td></td>
                                 <td class="payment">
                                     <p style="margin-bottom: 5px; color: black; font-size: 13px;">
-                                        $<%= tax %>
+                                        $
+                                        <%= tax %>
                                     </p>
                                 </td>
                             </tr>
@@ -291,7 +298,8 @@
                                 <td></td>
                                 <td class="payment">
                                     <h2>
-                                        $<%= total.toFixed(2) %>
+                                        $
+                                        <%= total.toFixed(2) %>
                                     </h2>
                                 </td>
                             </tr>

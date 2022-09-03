@@ -43,9 +43,6 @@ function refreshToken(req, res, next) {
 }
 
 function checkRefreshToken(req, res, next) {
-    console.log(req);
-    console.log('\nsssssssssss\n');
-    console.log(req.cookies);
     let refreshToken = req.cookies.refreshToken;
     if (refreshToken == null) {
         return res.sendStatus(403);

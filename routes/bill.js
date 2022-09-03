@@ -172,7 +172,6 @@ function generatePDF(res, mainResult, uuid) {
                 billData.email = results[0].email;
                 billData.phone = results[0].phone;
                 billData.cashier_name = results[0].name;
-                billData.image = process.env.LogoURL;
 
                 new Promise((resolve, reject) => {
                     ejs.renderFile(path.join(__dirname, "../views", "billTemplate.ejs"), billData, (err, data) => {
